@@ -108,8 +108,9 @@ function configurePage(origin: string): string {
   <button class="btn" type="submit">Generar enlace de instalación</button>
 </form>
 <div id="result">
-  <p><a class="btn" id="installLink" href="#">Instalar en Stremio</a></p>
-  <p>URL del manifest (para instalación manual o web.stremio.com):</p>
+  <p><a class="btn" id="installLink" href="#">Instalar en Stremio (app de escritorio/Android)</a></p>
+  <p><a class="btn" id="webInstallLink" href="#" target="_blank" rel="noopener">Instalar en Web (web.stremio.com)</a></p>
+  <p>URL del manifest (para instalación manual):</p>
   <p><code id="manifestUrl"></code></p>
 </div>
 <script>
@@ -126,6 +127,8 @@ function configurePage(origin: string): string {
     const manifestUrl = location.origin + '/manifest.json' + (q ? '?' + q : '');
     document.getElementById('manifestUrl').textContent = manifestUrl;
     document.getElementById('installLink').href = 'stremio://addon?url=' + encodeURIComponent(manifestUrl);
+    document.getElementById('webInstallLink').href =
+      'https://web.stremio.com/#/addons?addon=' + encodeURIComponent(manifestUrl);
     document.getElementById('result').style.display = 'block';
   });
 </script>
@@ -155,7 +158,7 @@ export async function handleRequest(
     return html(configurePage(url.origin));
   }
 
-  if (path === '/' || path === '') {
+  if (path === '/' || path === '' || path === '/landing') {
     return html(landingPage(url.origin));
   }
 

@@ -4,7 +4,7 @@
     { "source": "/manifest.json", "destination": "/api/manifest.json" },
     { "source": "/stream/:path*", "destination": "/api/stream/:path*" },
     { "source": "/configure", "destination": "/api/configure" },
-    { "source": "/", "destination": "/api" }
+    { "source": "/", "destination": "/api/landing" }
   ],
   "functions": {
     "api/[...path].ts": {

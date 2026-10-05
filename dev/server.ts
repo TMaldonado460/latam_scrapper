@@ -4,6 +4,14 @@ import { handleRequest } from '../src/app.js';
 const PORT = Number(process.env.PORT ?? 7000);
 
 const server = createServer(async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+  if (req.method === 'OPTIONS') {
+    res.statusCode = 204;
+    res.end();
+    return;
+  }
   try {
     const result = await handleRequest(
       req.url ?? '/',
