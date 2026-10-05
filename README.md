@@ -9,6 +9,7 @@ automáticamente debajo de los streams de torrents.
 
 | Fuente | Contenido | Estado |
 |---|---|---|
+| **Cuevana3K** (cuevana3k.pro) | Películas + series | ✅ Funciona (Servidor Hyper → filemoon/dood + vidsrc externos) |
 | **HomeCine** (www3.homecine.to) | Películas + series | ✅ Funciona (hosts Fastream) |
 | **Cuevana3** (www3.cuevana3.is) | Películas + series | ⚠️ La búsqueda y episodios funcionan; la lista de players está detrás de Cloudflare según IP — degrada a 0 resultados |
 | **Unlimplay** (player de CineHDPlus y otros) | Películas + series | 🔗 Enlace externo (se abre en el navegador del dispositivo, evita el bloqueo a datacenters) |

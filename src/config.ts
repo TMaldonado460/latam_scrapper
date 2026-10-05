@@ -1,6 +1,6 @@
 import type { Config, CountryCode } from './types.js';
 
-export const SOURCE_IDS = ['cuevana', 'homecine', 'unlimplay'] as const;
+export const SOURCE_IDS = ['cuevana', 'cuevana3k', 'homecine', 'unlimplay'] as const;
 export type SourceId = (typeof SOURCE_IDS)[number];
 
 const isLang = (v: string): v is CountryCode => v === 'es' || v === 'mx';

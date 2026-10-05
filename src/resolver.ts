@@ -64,7 +64,7 @@ async function handleSource(ctx: Ctx, source: Source, results: StreamInfo[]): Pr
       continue;
     }
 
-    let extracted;
+    let extracted: Awaited<ReturnType<typeof extractUrl>>;
     try {
       extracted = await withTimeout(
         extractUrl(sr.url, sr.meta, ctx),
@@ -72,16 +72,8 @@ async function handleSource(ctx: Ctx, source: Source, results: StreamInfo[]): Pr
         `${source.id} extractor`,
       );
     } catch (e) {
-      extracted = [
-        {
-          url: sr.url,
-          format: 'unknown' as const,
-          label: 'Error',
-          meta: sr.meta,
-          error: e instanceof Error ? e.message : String(e),
-          needsReferer: false,
-        },
-      ];
+      console.error(`[${source.id}] extractor failed for ${sr.url.href}:`, e);
+      extracted = [];
     }
     for (const ex of extracted) {
       results.push({

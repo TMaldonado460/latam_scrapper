@@ -2,14 +2,15 @@ import type { Ctx } from '../ctx.js';
 import type { Meta } from '../types.js';
 import { fetchText, NotFoundError } from '../fetcher.js';
 import { unpackEval } from '../utils.js';
+import { resolveHlsMaster } from './hlsMaster.js';
 import { Extracted, Extractor } from './extractor.js';
 
 /**
  * Fastream.to — the player host used by HomeCine.
  *
- * NOTE: master.m3u8 tokens are single-use, so we must NOT fetch the
- * playlist here (that would consume the token and break playback).
- * Metadata (height/size/title) comes from the /d/{id} info page.
+ * Master playlist tokens are single-use, so we resolve the best variant
+ * here (variant playlists are reusable) and never ship the raw master.
+ * Metadata (size) comes from the /d/{id} info page.
  */
 export class Fastream extends Extractor {
   public readonly id = 'fastream';
@@ -37,16 +38,16 @@ export class Fastream extends Extractor {
     if (!fileMatch) throw new NotFoundError('Fastream: stream link not found');
     const masterUrl = new URL(fileMatch[1]);
 
+    const { url: streamUrl, height } = await resolveHlsMaster(masterUrl, headers.Referer);
+
     // Metadata from the /d/{id} page (does not consume the stream token)
-    let height: number | undefined = meta.height;
     let bytes: number | undefined;
     try {
       const infoHtml = (await fetchText(`https://${url.host}/d/${id}`, { headers })).text;
-      const resMatch = infoHtml.match(/(\d{3,4})x(\d{3,4}), ([\d.]+ ?[GM]B)/);
-      if (resMatch) {
-        height = parseInt(resMatch[2], 10);
-        const num = parseFloat(resMatch[3]);
-        bytes = Math.round(num * (resMatch[3].includes('G') ? 1024 * 1024 * 1024 : 1024 * 1024));
+      const sizeMatch = infoHtml.match(/([\d.]+ ?[GM]B)/);
+      if (sizeMatch) {
+        const num = parseFloat(sizeMatch[1]);
+        bytes = Math.round(num * (sizeMatch[1].includes('G') ? 1024 * 1024 * 1024 : 1024 * 1024));
       }
     } catch {
       // info page is best-effort
@@ -54,7 +55,7 @@ export class Fastream extends Extractor {
 
     return [
       {
-        url: masterUrl,
+        url: streamUrl,
         format: 'hls',
         meta: {
           ...meta,
