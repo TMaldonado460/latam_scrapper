@@ -1,0 +1,19 @@
+{
+  "name": "latam-scrapper",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Stremio addon: fallback HTTP streams en Español Latino desde Cuevana3 y HomeCine",
+  "scripts": {
+    "dev": "tsx dev/server.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

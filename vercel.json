@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    { "source": "/manifest.json", "destination": "/api/manifest.json" },
+    { "source": "/stream/:path*", "destination": "/api/stream/:path*" },
+    { "source": "/configure", "destination": "/api/configure" },
+    { "source": "/", "destination": "/api" }
+  ],
+  "functions": {
+    "api/[...path].ts": {
+      "maxDuration": 30
+    }
+  }
+}
